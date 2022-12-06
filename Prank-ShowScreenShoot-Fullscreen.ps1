@@ -1,7 +1,7 @@
 <#
     1. Take ScreenShoot of Desktop and save to file. Win + PrintScreen --> This saves a image to C:\users\$env:username\Pictures\Screenshots
-    2. Run script. Will get the latest image from Screenshots folder. 
-    3. Exit fullscreen by pressing Q 
+    2. Save script somewhere, and run script from powershell, not Powershell ISE script window (to hide script from user). Will get the latest image from Screenshots folder. 
+    3. Exit fullscreen by pressing Q (this will also stop powershell process!)
 #>
 Add-Type -AssemblyName 'System.Windows.Forms'
 $file = ((Get-ChildItem -path "C:\users\$env:username\Pictures\Screenshots\*") | Sort-Object -Descending | Select-Object -First 1)
@@ -21,6 +21,7 @@ $form.controls.add($pictureBox)
 $form.Add_KeyDown({
         if ($_.KeyCode -eq "Q") {
             $form.Close()
+            Get-Process -Name powershell | Stop-Process
         }
     })
 $form.WindowState = 'Maximized'
